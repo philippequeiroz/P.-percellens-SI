@@ -1,4 +1,5 @@
 #Starting
+
 ##### SCRIPT_P._percellens_SI #####
 
 ###### CDA (Canonical Discriminant Analysis) ######
@@ -140,9 +141,46 @@ dados$SEXO <- trimws(dados$SEXO)
 
 SIBER_SEX <- ggplot(dados, aes(x = d13C, y = d15N, color = SEXO, fill = SEXO)) +
   
+  stat_ellipse(type = "norm", level = 0.40,
+               linewidth = 0.5, alpha = 0.20,
+               geom = "polygon") +
+  
+  geom_point(size = 5) +
+  
+  scale_color_manual(values = c("Female" = "#D55E00",
+                                "Male" = "#0072B2")) +
+  
+  scale_fill_manual(values = c("Female" = "#D55E00",
+                               "Male" = "#0072B2")) +
+  
+  labs(
+    x = expression(delta^13*C~"\u2030"),
+    y = expression(delta^15*N~"\u2030"),
+    color = "Sex",
+    fill = "Sex"
+  ) +
+  
+  theme_classic(base_size = 20)
+
+# mostrar
+SIBER_SEX
+
+# salvar
+ggsave("SIBER_SEX.tiff",
+       plot = SIBER_SEX,
+       width = 8,
+       height = 6,
+       dpi = 600,
+       compression = "lzw")
+
+
+
+
+SIBER_SEX <- ggplot(dados, aes(x = d13C, y = d15N, color = SEXO, fill = SEXO)) +
+  
   stat_ellipse(type = "norm", level = 0.40, linewidth = 0.5, alpha = 0.20, geom = "polygon") +
   
-  geom_point(size = 3, alpha = 0.9) +
+  geom_point(size = 5) +
   
   scale_color_manual(values = c("F" = "#D55E00", "M" = "#0072B2")) +
   scale_fill_manual(values = c("F" = "#D55E00", "M" = "#0072B2")) +
@@ -154,14 +192,14 @@ SIBER_SEX <- ggplot(dados, aes(x = d13C, y = d15N, color = SEXO, fill = SEXO)) +
     fill = "Sex"
   ) +
   
-  theme_classic(base_size = 14)
+  theme_classic(base_size = 20)
 
 SIBER_SEX <- ggplot(dados, aes(x = d13C, y = d15N, color = SEXO, fill = SEXO)) +
   
   stat_ellipse(type = "norm", level = 0.40, linewidth = 0.5,
                alpha = 0.20, geom = "polygon") +
   
-  geom_point(size = 3, alpha = 0.9) +
+  geom_point(size = 5) +
   
   scale_color_manual(values = c("F" = "#D55E00", "M" = "#0072B2")) +
   scale_fill_manual(values = c("F" = "#D55E00", "M" = "#0072B2")) +
@@ -173,7 +211,7 @@ SIBER_SEX <- ggplot(dados, aes(x = d13C, y = d15N, color = SEXO, fill = SEXO)) +
     fill = "Sex"
   ) +
   
-  theme_classic(base_size = 14)
+  theme_classic(base_size = 20)
 
 ggsave("SIBER_SEX.tiff",
        plot = grafico_sexo,
@@ -189,7 +227,7 @@ ggplot(dados, aes(x = d13C, y = d15N, color = MATURIDADE, fill = MATURIDADE)) +
   
   stat_ellipse(type = "norm", level = 0.40, linewidth = 0.5, alpha = 0.20, geom = "polygon") +
   
-  geom_point(size = 3) +
+  geom_point(size = 5) +
   
   scale_color_manual(values = c("Immature" = "#009E73", "Mature" = "#CC79A7")) +
   scale_fill_manual(values = c("Immature" = "#009E73", "Mature" = "#CC79A7")) +
@@ -201,14 +239,14 @@ ggplot(dados, aes(x = d13C, y = d15N, color = MATURIDADE, fill = MATURIDADE)) +
     fill = "Maturity"
   ) +
   
-  theme_classic(base_size = 14)
+  theme_classic(base_size = 20)
 
 SIBER_MATURITY <- ggplot(dados, aes(x = d13C, y = d15N, color = MATURIDADE, fill = MATURIDADE)) +
   
   stat_ellipse(type = "norm", level = 0.40, linewidth = 0.5,
                alpha = 0.20, geom = "polygon") +
   
-  geom_point(size = 3) +
+  geom_point(size = 5) +
   
   scale_color_manual(values = c("Immature" = "#009E73",
                                 "Mature" = "#CC79A7")) +
@@ -223,7 +261,7 @@ SIBER_MATURITY <- ggplot(dados, aes(x = d13C, y = d15N, color = MATURIDADE, fill
     fill = "Maturity"
   ) +
   
-  theme_classic(base_size = 14)
+  theme_classic(base_size = 20)
 
 ggsave("SIBER_MATURITY.tiff",
        plot = SIBER_MATURITY,
@@ -344,7 +382,7 @@ grafico_4grupos <- ggplot(
       shape = Grupo)
 ) +
   
-  geom_point(size = 3.2, alpha = 0.95) +
+  geom_point(size = 5, alpha = 0.95) +
   
   scale_color_manual(values = c(
     "Immature female" = "#E69F00",
@@ -367,7 +405,7 @@ grafico_4grupos <- ggplot(
     shape = "Group"
   ) +
   
-  theme_classic(base_size = 14) +
+  theme_classic(base_size = 20) +
   theme(
     legend.position = "right",
     legend.title = element_text(face = "bold")
@@ -380,3 +418,120 @@ ggsave("Biplot_4groups_clean.tiff",
        width = 8,
        height = 6,
        dpi = 600)
+
+##### Stomach Content Analysis
+
+#PERMANOVA
+library(vegan)
+
+diet <- read_delim(pipe("pbpaste"), delim = "\t")
+
+head(dados)
+str(dados)
+names(dados)
+
+mat_diet <- diet[, c("DECA","MOLL","FISH","AMPH","OCRUST")]
+
+mat_sqrt <- sqrt(mat_diet)
+
+adonis2(mat_sqrt ~ SEXO, data = diet, method = "bray")
+adonis2(mat_sqrt ~ MATUR, data = diet, method = "bray")
+
+dist_diet <- vegdist(mat_sqrt, method = "bray")
+anova(betadisper(dist_diet, diet$SEXO))
+anova(betadisper(dist_diet, diet$MATUR))
+
+#Levin
+# somar peso total por categoria
+totais <- colSums(diet[, c("DECA","MOLL","FISH","AMPH","OCRUST")])
+
+# proporções
+p <- totais / sum(totais)
+
+p
+
+B <- 1 / sum(p^2)
+
+n <- length(p)
+
+BA <- (B - 1) / (n - 1)
+
+B
+BA
+
+#Costello / Amundsen
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# matriz de dieta
+mat <- diet[, c("DECA","MOLL","FISH","AMPH","OCRUST")]
+
+# total por indivíduo
+diet$total <- rowSums(mat)
+
+# função Costello
+costello <- data.frame(
+  Prey = colnames(mat),
+  FO = NA,
+  Pi = NA
+)
+
+for(i in 1:ncol(mat)){
+  
+  prey <- mat[,i]
+  
+  # indivíduos que comeram a presa
+  present <- prey > 0
+  
+  # frequência ocorrência
+  costello$FO[i] <- sum(present) / nrow(mat) * 100
+  
+  # abundância específica
+  costello$Pi[i] <- sum(prey[present]) /
+    sum(diet$total[present]) * 100
+}
+
+costello
+
+ggplot(costello,
+       aes(x = FO, y = Pi, label = Prey)) +
+  
+  geom_point(size = 5, color = "steelblue") +
+  
+  geom_text(size = 4, nudge_y = 3) +
+  
+  geom_hline(yintercept = 50, linetype = 2, color = "gray60") +
+  geom_vline(xintercept = 50, linetype = 2, color = "gray60") +
+  
+  labs(
+    x = "Frequency of occurrence (%)",
+    y = "Prey-specific abundance (%)"
+  ) +
+  
+  theme_classic(base_size = 14)
+
+grafico_costello <- ggplot(costello,
+                           aes(x = FO, y = Pi, label = Prey)) +
+  
+  geom_point(size = 5, color = "steelblue") +
+  
+  geom_text(size = 5, nudge_y = 5) +
+  
+  geom_hline(yintercept = 50, linetype = 2, color = "gray60") +
+  geom_vline(xintercept = 50, linetype = 2, color = "gray60") +
+  
+  labs(
+    x = "Frequency of occurrence (%)",
+    y = "Prey-specific abundance (%)"
+  ) +
+  
+  theme_classic(base_size = 20)
+
+ggsave("Figure_Costello.tiff",
+       plot = grafico_costello,
+       width = 8,
+       height = 6,
+       units = "in",
+       dpi = 600,
+       compression = "lzw")
