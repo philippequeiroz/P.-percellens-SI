@@ -59,9 +59,163 @@ ggplot(dados, aes(x = SEXO, y = d15N)) +
   geom_boxplot() +
   theme_minimal()
 
+ggplot(dados, aes(x = SEXO, y = d13C)) +
+  geom_boxplot() +
+  theme_minimal()
+
+BOX_d15N_SEX <- ggplot(dados, aes(x = SEXO, y = d15N, fill = SEXO)) +
+  
+  geom_boxplot(width = 0.6,
+               alpha = 0.7,
+               outlier.shape = NA) +
+  
+  geom_jitter(width = 0.12,
+              size = 2.8,
+              alpha = 0.9) +
+  
+  scale_fill_manual(values = c("Female" = "#009E73",
+                               "Male" = "#CC79A7")) +
+  
+  scale_color_manual(values = c("Female" = "#009E73",
+                                "Male" = "#CC79A7")) +
+  
+  labs(
+    x = "Sex",
+    y = expression(delta^15*N~"\u2030")
+  ) +
+  
+  theme_classic(base_size = 20) +
+  
+  theme(
+    legend.position = "none"
+  )
+
+BOX_d15N_SEX
+
+ggsave(
+  "BOX_d15N_SEX.tiff",
+  plot = BOX_d15N_SEX,
+  width = 8,
+  height = 6,
+  dpi = 600,
+  compression = "lzw"
+)
+
+
+BOX_d13C_SEX <- ggplot(dados, aes(x = SEXO, y = d13C, fill = SEXO)) +
+  
+  geom_boxplot(width = 0.6,
+               alpha = 0.7,
+               outlier.shape = NA) +
+  
+  geom_jitter(width = 0.12,
+              size = 2.8,
+              alpha = 0.9) +
+  
+  scale_fill_manual(values = c("Female" = "#009E73",
+                               "Male" = "#CC79A7")) +
+  
+  labs(
+    x = "Sex",
+    y = expression(delta^13*C~"\u2030")
+  ) +
+  
+  theme_classic(base_size = 20) +
+  
+  theme(
+    legend.position = "none"
+  )
+
+BOX_d13C_SEX
+
+ggsave(
+  "BOX_d13C_SEX.tiff",
+  plot = BOX_d13C_SEX,
+  width = 8,
+  height = 6,
+  dpi = 600,
+  compression = "lzw"
+)
+
+
+# Boxplot por maturidade
+ggplot(dados, aes(x = MATURIDADE, y = d15N)) +
+  geom_boxplot() +
+  theme_minimal()
+
 ggplot(dados, aes(x = MATURIDADE, y = d13C)) +
   geom_boxplot() +
   theme_minimal()
+
+BOX_d15N_MAT <- ggplot(dados, aes(x = MATURIDADE, y = d15N, fill = MATURIDADE)) +
+  
+  geom_boxplot(width = 0.6,
+               alpha = 0.7,
+               outlier.shape = NA) +
+  
+  geom_jitter(width = 0.12,
+              size = 2.8,
+              alpha = 0.9) +
+  
+  scale_fill_manual(values = c("Immature" = "#D55E00",
+                               "Mature" = "#0072B2")) +
+  
+  labs(
+    x = "Maturity",
+    y = expression(delta^15*N~"\u2030")
+  ) +
+  
+  theme_classic(base_size = 20) +
+  
+  theme(
+    legend.position = "none"
+  )
+
+BOX_d15N_MAT
+
+ggsave(
+  "BOX_d15N_MAT.tiff",
+  plot = BOX_d15N_MAT,
+  width = 8,
+  height = 6,
+  dpi = 600,
+  compression = "lzw"
+)
+
+BOX_d13C_MAT <- ggplot(dados, aes(x = MATURIDADE, y = d13C, fill = MATURIDADE)) +
+  
+  geom_boxplot(width = 0.6,
+               alpha = 0.7,
+               outlier.shape = NA) +
+  
+  geom_jitter(width = 0.12,
+              size = 2.8,
+              alpha = 0.9) +
+  
+  scale_fill_manual(values = c("Immature" = "#D55E00",
+                               "Mature" = "#0072B2")) +
+  
+  labs(
+    x = "Maturity",
+    y = expression(delta^13*C~"\u2030")
+  ) +
+  
+  theme_classic(base_size = 20) +
+  
+  theme(
+    legend.position = "none"
+  )
+
+BOX_d13C_MAT
+
+ggsave(
+  "BOX_d13C_MAT.tiff",
+  plot = BOX_d13C_MAT,
+  width = 8,
+  height = 6,
+  dpi = 600,
+  compression = "lzw"
+)
 
 # Regressão
 ggplot(dados, aes(x = CT, y = d15N)) +
@@ -147,11 +301,11 @@ SIBER_SEX <- ggplot(dados, aes(x = d13C, y = d15N, color = SEXO, fill = SEXO)) +
   
   geom_point(size = 5) +
   
-  scale_color_manual(values = c("Female" = "#D55E00",
-                                "Male" = "#0072B2")) +
+  scale_color_manual(values = c("Female" = "#009E73",
+                                "Male" = "#CC79A7")) +
   
-  scale_fill_manual(values = c("Female" = "#D55E00",
-                               "Male" = "#0072B2")) +
+  scale_fill_manual(values = c("Female" = "#009E73",
+                               "Male" = "#CC79A7")) +
   
   labs(
     x = expression(delta^13*C~"\u2030"),
@@ -186,8 +340,8 @@ ggplot(dados, aes(x = d13C, y = d15N, color = MATURIDADE, fill = MATURIDADE)) +
   
   geom_point(size = 5) +
   
-  scale_color_manual(values = c("Immature" = "#009E73", "Mature" = "#CC79A7")) +
-  scale_fill_manual(values = c("Immature" = "#009E73", "Mature" = "#CC79A7")) +
+  scale_color_manual(values = c("Immature" = "#D55E00", "Mature" = "#009E73")) +
+  scale_fill_manual(values = c("Immature" = "#D55E00", "Mature" = "#009E73")) +
   
   labs(
     x = expression(delta^13*C~"\u2030"),
@@ -205,11 +359,11 @@ SIBER_MATURITY <- ggplot(dados, aes(x = d13C, y = d15N, color = MATURIDADE, fill
   
   geom_point(size = 5) +
   
-  scale_color_manual(values = c("Immature" = "#009E73",
-                                "Mature" = "#CC79A7")) +
+  scale_color_manual(values = c("Immature" = "#D55E00",
+                                "Mature" = "#0072B2")) +
   
-  scale_fill_manual(values = c("Immature" = "#009E73",
-                               "Mature" = "#CC79A7")) +
+  scale_fill_manual(values = c("Immature" = "#D55E00",
+                               "Mature" = "#0072B2")) +
   
   labs(
     x = expression(delta^13*C~"\u2030"),
@@ -376,6 +530,8 @@ ggsave("Biplot_4groups_clean.tiff",
        height = 6,
        dpi = 600)
 
+
+
 ##### Stomach Content Analysis
 
 #PERMANOVA
@@ -492,6 +648,227 @@ ggsave("Figure_Costello.tiff",
        units = "in",
        dpi = 600,
        compression = "lzw")
+
+##############
+
+library(ggplot2)
+library(ggrepel)
+
+# cores das presas
+cores_presas <- c(
+  "DECA"   = "#D55E00",
+  "MOLL"   = "#009E73",
+  "FISH"   = "#0072B2",
+  "AMPH"   = "#CC79A7",
+  "OCRUST" = "#E69F00"
+)
+
+grafico_costello_col <- ggplot(costello,
+                           aes(x = FO,
+                               y = Pi,
+                               color = Prey,
+                               fill = Prey,
+                               label = Prey)) +
+  
+  geom_point(size = 6,
+             alpha = 0.9) +
+  
+  geom_text_repel(size = 5,
+                  fontface = "bold",
+                  show.legend = FALSE) +
+  
+  geom_hline(yintercept = 50,
+             linetype = 2,
+             color = "gray60") +
+  
+  geom_vline(xintercept = 50,
+             linetype = 2,
+             color = "gray60") +
+  
+  scale_color_manual(values = cores_presas) +
+  scale_fill_manual(values = cores_presas) +
+  
+  labs(
+    x = "Frequency of occurrence (%)",
+    y = "Prey-specific abundance (%)"
+  ) +
+  
+  theme_classic(base_size = 20) +
+  
+  theme(
+    legend.position = "none"
+  )
+
+grafico_costello_col
+
+ggsave(
+  "Figure_Costello_col.tiff",
+  plot = grafico_costello_col,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 600,
+  compression = "lzw"
+)
+
+
+######### density plot
+
+diet_long <- diet %>%
+  pivot_longer(
+    cols = c(DECA, MOLL, FISH, AMPH, OCRUST),
+    names_to = "Prey",
+    values_to = "Weight"
+  ) %>%
+  filter(Weight > 0)
+
+
+density_plot <- ggplot(diet_long,
+                       aes(x = Weight,
+                           fill = Prey,
+                           color = Prey)) +
+  
+  geom_density(alpha = 0.35,
+               linewidth = 1.1) +
+  
+  scale_fill_manual(values = cores_presas) +
+  scale_color_manual(values = cores_presas) +
+  
+  scale_x_log10() +
+  
+  labs(
+    x = "Prey weight (g, log scale)",
+    y = "Density"
+  ) +
+  
+  theme_classic(base_size = 18) +
+  
+  theme(
+    legend.title = element_blank(),
+    axis.title = element_text(face = "bold")
+  )
+
+density_plot
+
+
+ggsave(
+  "Density_Diet.tiff",
+  plot = density_plot,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 600,
+  compression = "lzw"
+)
+
+
+
+
+density_plot2 <- ggplot(diet_long,
+                       aes(x = Weight,
+                           fill = Prey,
+                           color = Prey)) +
+  
+  geom_density(alpha = 0.30,
+               linewidth = 1,
+               adjust = 2) +
+  
+  scale_fill_manual(values = cores_presas) +
+  scale_color_manual(values = cores_presas) +
+  
+  scale_x_log10() +
+  
+  coord_cartesian(ylim = c(0, 1)) +
+  
+  labs(
+    x = "Prey weight (g, log scale)",
+    y = "Density"
+  ) +
+  
+  theme_classic(base_size = 18) +
+  
+  theme(
+    legend.title = element_blank(),
+    axis.title = element_text(face = "bold")
+  )
+
+density_plot2
+
+ggsave(
+  "Density_Diet2.tiff",
+  plot = density_plot2,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 600,
+  compression = "lzw"
+)
+
+##### GRÁFICO IRI%
+
+IRI <- data.frame(
+  Prey = c("Decapoda",
+           "Brachyura",
+           "Portunidae",
+           "Fish",
+           "Pleoticus muelleri",
+           "Squillidae",
+           "Penaeoidea",
+           "Other prey"),
+  
+  IRI_percent = c(
+    58.81,
+    13.94,
+    17.73,
+    3.21,
+    2.90,
+    2.58,
+    0.42,
+    0.41
+  )
+)
+
+IRI$Prey <- factor(
+  IRI$Prey,
+  levels = IRI$Prey[order(IRI$IRI_percent)]
+)
+
+grafico_IRI <- ggplot(IRI,
+                      aes(x = IRI_percent,
+                          y = Prey,
+                          fill = Prey)) +
+  
+  geom_col(width = 0.75,
+           alpha = 0.9) +
+  
+  geom_text(aes(label = round(IRI_percent, 1)),
+            hjust = -0.2,
+            size = 5) +
+  
+  scale_fill_brewer(palette = "Spectral") +
+  
+  labs(
+    x = "%IRI",
+    y = NULL
+  ) +
+  
+  theme_classic(base_size = 18) +
+  
+  theme(
+    legend.position = "none",
+    axis.title = element_text(face = "bold")
+  )
+
+grafico_IRI
+
+ggsave(
+  "IRI_categories.tiff",
+  plot = grafico_IRI,
+  width = 8,
+  height = 6,
+  dpi = 600,
+  compression = "lzw"
+)
 
 
 ########## MAP ##########
