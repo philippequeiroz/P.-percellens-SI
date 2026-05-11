@@ -286,6 +286,30 @@ plotSiberObject(siber.obj.mat)
 
 groupMetricsML(siber.obj.mat)
 
+siber.data <- dados %>%
+  mutate(
+    group = ifelse(SEXO == "Female", 1, 2),
+    community = 1,
+    iso1 = d13C,
+    iso2 = d15N
+  ) %>%
+  select(iso1, iso2, group, community) %>%
+  as.data.frame()
+
+siber.mat <- dados %>%
+  mutate(
+    group = ifelse(MATURIDADE == "Immature", 1, 2),
+    community = 1,
+    iso1 = d13C,
+    iso2 = d15N
+  ) %>%
+  select(iso1, iso2, group, community) %>%
+  as.data.frame()
+
+groupMetricsML(ellipses)
+
+siberMVN()
+
 #plot
 library(ggplot2)
 library(dplyr)
@@ -381,6 +405,50 @@ ggsave("SIBER_MATURITY.tiff",
        dpi = 600)
 
 getwd()
+
+###SEAB (Bayesian Standard Ellipse Area)
+
+siber.data <- dados %>%
+  mutate(
+    group = ifelse(SEXO == "Female", 1, 2),
+    community = 1,
+    iso1 = d13C,
+    iso2 = d15N
+  ) %>%
+  select(iso1, iso2, group, community) %>%
+  as.data.frame()
+
+# recriar objeto SIBER
+ellipses <- createSiberObject(siber.data)
+
+# verificar
+groupMetricsML(ellipses)
+
+priors <- list(
+  R = diag(2),
+  k = 2,
+  tau.mu = 1e-3
+)
+
+parms <- list(
+  n.iter = 20000,
+  n.burnin = 1000,
+  n.thin = 10,
+  n.chains = 2
+)
+
+ellipses.posterior <- siberMVN(
+  ellipses,
+  parms,
+  priors
+)
+
+SEA.B <- siberEllipses(ellipses.posterior)
+
+mean(SEA.B[,1] > SEA.B[,2])
+
+mean(SEA.B[,2] > SEA.B[,1])
+
 
 # NicheRover
 library(nicheROVER)
